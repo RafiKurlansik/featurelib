@@ -118,25 +118,28 @@ bam
 
 # COMMAND ----------
 
-df = spark.table("titanic").limit(100000).toPandas()
+import numpy as np
+import pandas as pd
+
+titanic_clean = spark.table("titanic").limit(100000).toPandas()
 # Step: Replace NaN with missing value in 'Cabin'
-df['Cabin'] = df['Cabin'].replace('NaN', np.nan)
+titanic_clean['Cabin'] = titanic_clean['Cabin'].replace('NaN', np.nan)
 
 # Step: Drop missing values in ['Cabin']
-df = df.dropna(subset=['Cabin'])
+titanic_clean = titanic_clean.dropna(subset=['Cabin'])
 
 # Step: Manipulate strings of 'Cabin' and perform a split on '[0-9]'
-split_df = df['Cabin'].str.split('[0-9]', expand=True)
+split_df = titanic_clean['Cabin'].str.split('[0-9]', expand=True)
 split_df.columns = ['Cabin' + f"_{id_}" for id_ in range(len(split_df.columns))]
-df = pd.merge(df, split_df, how="left", left_index=True, right_index=True)
+titanic_clean = pd.merge(titanic_clean, split_df, how="left", left_index=True, right_index=True)
 
 # Step: Select columns
-df = df[['Fare', 'Sex', 'Survived', 'Age', 'Cabin_0']]
+titanic_clean = titanic_clean[['Fare', 'Sex', 'Survived', 'Age', 'Cabin_0']]
 
 # Step: Drop missing values in [All columns]
-df = df.dropna()
+titanic_clean = titanic_clean.dropna()
 
-display(df)
+display(titanic_clean)
 
 # COMMAND ----------
 

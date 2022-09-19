@@ -108,7 +108,7 @@ create_tables.convert_csv_to_delta(path="./data/passenger_labels.csv",
 
 # COMMAND ----------
 
-# MAGIC %pip install bamboolib==1.30.0j
+# MAGIC %pip install bamboolib
 
 # COMMAND ----------
 
